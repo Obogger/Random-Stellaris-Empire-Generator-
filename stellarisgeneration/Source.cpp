@@ -20,6 +20,14 @@ using namespace std;
 
 void randomCalculator(int type);
 
+int randomApperanceRace(int gameFrom);
+int randomApperanceType(int gameFrom, int race);
+int randomGovernmentType(int race);
+int randomOrigin(int gestalt, int type, int race);
+int randomWorldType(int type);
+int randomTraitQuality(int race);
+
+int restrictions[] = { 99,99,99,99,99,99,99 };
 int game[100];
 int gameTypeApperance[500] = {
 13,16,13,18,17,18,18,16,16,16,15,15,15,15,0,0,0,0,0,0,0,0 };
@@ -64,144 +72,16 @@ void randomCalculator(int type)
 	srand(GetTickCount64());
 	int gameFrom = (type - 1) * 40;
 	string traitQuality;
-
-	game[0] = rand() % gameTypeApperance[gameFrom];
-	game[1] = rand() % gameTypeApperance[gameFrom + game[0] + 1];
-	game[2] = rand() % gameTypeOrigin[type - 1];
-	game[3] = rand() % gameTypeWorld[type - 1] + 1;
-	game[2] = rand() % 20;
-	int temp = 0;
-	int restrictions[] = { 99,99,99,99,99,99,99 };
+	bool isGestalt = NULL;
+	game[0] = randomApperanceRace(gameFrom);
+	game[1] = randomApperanceType(gameFrom, game[0]);
+	game[2] = randomGovernmentType(game[0]);
+	game[3] = randomOrigin(game[2], type, game[0]);
+	game[4] = randomWorldType(type);
+	game[5] = randomTraitQuality(game[0]);
 	int i = 0;
-	bool exception = false;
 	int fnatic = 0;
 	int normal = 0;
-	if (game[0] == 1)
-	{
-		traitQuality = qualityType[rand() % 11 + 11];
-	}
-	else
-	{
-		traitQuality = qualityType[rand() % 11];
-	}
-	bool isGestalt = NULL;
-	if (game[0] == 1)
-	{
-		game[12] = 0;
-		isGestalt = true;
-	}
-	else if (rand() % 100 + 1 <= 10)
-	{
-		game[12] = 1;
-		isGestalt = true;
-	}
-	else
-	{
-		game[12] = 2;
-		isGestalt = false;
-	}
-	char excep = 'q';
-	int turn = 0;
-	for (int c = 0; originRestrictions[game[2]][c] != ':'; c++)
-	{
-		if (originRestrictions[game[2]][c] != '+' && originRestrictions[game[2]][c] != '-')
-		{
-			if (int(originRestrictions[game[2]][c] - 48) < 10)
-			{
-				temp = temp * 10 + int(originRestrictions[game[2]][c] - 48);
-				turn++;
-
-			}
-			else
-			{
-				excep = originRestrictions[game[2]][c];
-				exception = true;
-			}
-		}
-		else
-		{
-			if (originRestrictions[game[2]][c] == '+')
-			{
-
-				if (exception == true)
-				{
-					if (excep == 'G')
-					{
-						if (isGestalt == false)
-						{
-							c = -1;
-							game[2] = rand() % gameTypeOrigin[type - 1];
-							game[2] = rand() % 20;
-						}
-					}
-					else if (excep == 'M')
-					{
-						if (game[0] != 1)
-						{
-							c = -1;
-							game[2] = rand() % gameTypeOrigin[type - 1];
-							game[2] = rand() % 20;
-						}
-					}
-					else if (excep == 'H')
-					{
-						if (game[12] != 1)
-						{
-							c = -1;
-							game[2] = rand() % gameTypeOrigin[type - 1];
-							game[2] = rand() % 20;
-						}
-					}
-					exception = false;
-				}
-				else if (turn)
-				{
-
-				}
-				turn = 0;
-			}
-			else if (originRestrictions[game[2]][c] == '-')
-			{
-				if (exception == true)
-				{
-					if (excep == 'G')
-					{
-						if (isGestalt == true)
-						{
-							c = -1;
-							game[2] = rand() % gameTypeOrigin[type - 1];
-							game[2] = rand() % 20;
-						}
-					}
-					else if (excep == 'M')
-					{
-						if (game[0] == 1)
-						{
-							c = -1;
-							game[2] = rand() % gameTypeOrigin[type - 1];
-							game[2] = rand() % 20;
-						}
-					}
-					else if (excep == 'H')
-					{
-						if (game[12] == 1)
-						{
-							c = -1;
-							game[2] = rand() % gameTypeOrigin[type - 1];
-							game[2] = rand() % 20;
-						}
-					}
-					exception = false;
-					turn = 0;
-				}
-				//restrictions[i] = temp;
-			}
-			temp = 0;
-			exception = false;
-			i++;
-		}
-
-	}
 	int current[20] = { 99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99, };
 	int c = 0;
 	i = 0;
@@ -310,10 +190,10 @@ void randomCalculator(int type)
 	}
 	cout << prompt[0] << gameTypeApperanceName[game[0]] << endl;
 	cout << prompt[1] << game[1] << endl;
-	cout << prompt[2] << ((game[2]) / 4) + 1 << "/" << ((gameTypeOrigin[0]) / 4) - ((game[2]) / 4) + 1
-		<< ":" << ((game[2]) - ((game[2] - 1) / 4) * 4) + 1 << endl;
-	cout << prompt[3] << game[3] << endl;
-	cout << prompt[4] << traitQuality << endl;
+	cout << prompt[2] << ((game[3]) / 4) + 1 << "/" << ((gameTypeOrigin[0]) / 4) - ((game[3]) / 4) + 1
+		<< ":" << ((game[3]) - ((game[3] - 1) / 4) * 4) + 1 << endl;
+	cout << prompt[3] << game[4] << endl;
+	cout << prompt[4] << qualityType[game[5]] << endl;
 	cout << prompt[5] << endl;
 	cout << prompt[6];
 	if (game[12] == 0)
@@ -352,4 +232,178 @@ void randomCalculator(int type)
 
 
 
+}
+
+int randomApperanceRace(int gameFrom)
+{
+	int awnser = rand() % gameTypeApperance[gameFrom];
+	return awnser;
+}
+int randomApperanceType(int gameFrom, int race)
+{
+	int awnser = rand() % gameTypeApperance[gameFrom + race];
+	return awnser;
+
+}
+int randomGovernmentType(int race)
+{
+	int awnser;
+	if (race == 1)
+	{
+		awnser = 1;
+	}
+	else if (rand() % 100 + 1 <= 10)
+	{
+		awnser = 2;
+	}
+	else
+	{
+		awnser = 0;
+	}
+	return awnser;
+	
+}
+int randomOrigin(int gestalt, int type, int race)
+{
+	int awnser = rand() % 20;
+	bool isGestalt = gestalt;
+	int temp = 0;
+	int turn = 0;
+	char excep = 'q';
+	bool exception = false;
+	for (int c = 0; originRestrictions[awnser][c] != ':'; c++)
+	{
+		if (originRestrictions[awnser][c] != '+' && originRestrictions[awnser][c] != '-')
+		{
+			if (int(originRestrictions[awnser][c] - 48) < 10)
+			{
+				temp = temp * 10 + int(originRestrictions[awnser][c] - 48);
+				turn++;
+
+			}
+			else
+			{
+				excep = originRestrictions[awnser][c];
+				exception = true;
+			}
+		}
+		else
+		{
+			if (originRestrictions[awnser][c] == '+')
+			{
+
+				if (exception == true)
+				{
+					if (excep == 'G')
+					{
+						if (isGestalt == false)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					else if (excep == 'M')
+					{
+						if (race != 1)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					else if (excep == 'H')
+					{
+						if (gestalt != 2)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					else if (excep == 'L')
+					{
+						if (race != 9)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					exception = false;
+				}
+				else if (turn)
+				{
+
+				}
+				turn = 0;
+			}
+			else if (originRestrictions[awnser][c] == '-')
+			{
+				if (exception == true)
+				{
+					if (excep == 'G')
+					{
+						if (isGestalt == true)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					else if (excep == 'M')
+					{
+						if (game[0] == 1)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					else if (excep == 'H')
+					{
+						if (game[2] == 2)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					else if (excep == 'L')
+					{
+						if (race == 9)
+						{
+							c = -1;
+							awnser = rand() % gameTypeOrigin[type - 1];
+							awnser = rand() % 20;
+						}
+					}
+					exception = false;
+				}
+				turn = 0;
+				//restrictions[i] = temp;
+			}
+			temp = 0;
+		}
+
+	}
+	return awnser;
+}
+int randomWorldType(int type)
+{
+	int awnser = rand() % gameTypeWorld[type - 1] + 1;
+	return awnser;
+}
+int randomTraitQuality(int race)
+{
+	int awnser;
+	if (race == 1)
+	{
+		awnser = rand() % 11 + 11;
+	}
+	else
+	{
+		awnser = rand() % 11;
+	}
+	return awnser;
 }
