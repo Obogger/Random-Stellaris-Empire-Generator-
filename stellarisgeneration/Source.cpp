@@ -15,6 +15,9 @@
 #include<time.h>
 #include<cstdlib>
 
+
+#include"GameRules.h"
+
 using namespace std;
 
 
@@ -29,8 +32,6 @@ int randomTraitQuality(int race);
 
 int restrictions[] = { 99,99,99,99,99,99,99 };
 int game[100];
-int gameTypeApperance[500] = {
-13,16,13,18,17,18,18,16,16,16,15,15,15,15,0,0,0,0,0,0,0,0 };
 int gameTypeOrigin[500] = { 95 };
 int gameTypeWorld[500] = { 72 };
 int gameTypeTraits[500] = { 300, 60 };
@@ -39,11 +40,6 @@ string prompt[] = { "Apperance Race: ", "Apperance Type: ", "Origin: ", "Planet 
 
 string qualityType[] = { "Failure", "Incapable", "Inferior", "Avrage", "Avrage", "Avrage", "Avrage", "Avrage", "Superior", "Gifted", "Perfect",
 "Scrap", "Scrap", "Scrap" , "Avrage", "Avrage", "Avrage", "Avrage", "Avrage", "Excellent", "Excellent", "Excellent" };
-
-
-string gameTypeApperanceName[] = { "Humanoid", "Machine", "Mammalian", "Reptilian", "Avian",
-"Arthropoid", "Mollusciod", "Fungoid", "Plantoid", "Lithiod", "Necroid", "Aquatic", "Toxoid"
-};
 
 string gameGestaltEthics[] = { "Progression", "Analysis", "Encroachment", "Connection", "Convalescence", "Logistics",
 "Impassive", "Introspective", "Autonomous", "Affective", "Extrospective", "Convergent"
@@ -68,9 +64,14 @@ int main()
 }
 void randomCalculator(int type)
 {
+	int gameFrom = (type - 1) * 40;
+	GameRules gameRule;
+	gameRule.apperanceRace = gameRule.randomApperanceRace(gameFrom);
+	gameRule.apperanceType = gameRule.randomApperanceType(gameFrom);
+
+
 	system("cls");
 	srand(GetTickCount64());
-	int gameFrom = (type - 1) * 40;
 	string traitQuality;
 	bool isGestalt = NULL;
 	game[0] = randomApperanceRace(gameFrom);
@@ -188,7 +189,7 @@ void randomCalculator(int type)
 			}
 		}
 	}
-	cout << prompt[0] << gameTypeApperanceName[game[0]] << endl;
+	cout << prompt[0] << gameRule.apperanceRace << endl;
 	cout << prompt[1] << game[1] << endl;
 	cout << prompt[2] << ((game[3]) / 4) + 1 << "/" << ((gameTypeOrigin[0]) / 4) - ((game[3]) / 4) + 1
 		<< ":" << ((game[3]) - ((game[3] - 1) / 4) * 4) + 1 << endl;
@@ -231,18 +232,6 @@ void randomCalculator(int type)
 	return;
 
 
-
-}
-
-int randomApperanceRace(int gameFrom)
-{
-	int awnser = rand() % gameTypeApperance[gameFrom];
-	return awnser;
-}
-int randomApperanceType(int gameFrom, int race)
-{
-	int awnser = rand() % gameTypeApperance[gameFrom + race];
-	return awnser;
 
 }
 int randomGovernmentType(int race)
