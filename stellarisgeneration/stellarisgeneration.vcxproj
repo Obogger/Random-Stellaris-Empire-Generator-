@@ -128,7 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ApperanceGenerator.cpp" />
+    <ClCompile Include="GovernmentTypeGenerator.cpp" />
+    <ClCompile Include="OriginGenerator.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TraitGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameRules.h" />

@@ -24,3 +24,7 @@ int GameRules::randomApperanceType(int gameFrom)
 	int awnser = rand() % gameTypeApperance[gameFrom + race];
 	return awnser;
 }
+int GameRules::getRace()
+{
+	return race;
+}
